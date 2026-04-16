@@ -166,9 +166,9 @@ export default function SignIn() {
             {/* Sign up link */}
             <p className="text-center text-slate-600 text-sm mt-6">
               Não tem uma conta?{' '}
-              <a href="#" className="text-rose-600 hover:text-rose-700 font-semibold">
+              <Link href="/sign-up" className="text-rose-600 hover:text-rose-700 font-semibold">
                 Criar conta
-              </a>
+              </Link>
             </p>
           </CardContent>
         </Card>
