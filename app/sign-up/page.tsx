@@ -1,12 +1,16 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft, Mail, Lock, Eye, EyeOff, User, CheckCircle2 } from 'lucide-react';
+import Image from 'next/image';
+import { signUp } from '../api/users/auth';
 
 export default function SignUp() {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -18,6 +22,7 @@ export default function SignUp() {
     acceptTerms: false,
   });
   const [passwordError, setPasswordError] = useState('');
+  const [error, setError] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -26,14 +31,17 @@ export default function SignUp() {
       [name]: type === 'checkbox' ? checked : value,
     }));
     
-    // Clear password error when user starts typing
+    // Clear errors when user starts typing
     if (name === 'confirmPassword' || name === 'password') {
       setPasswordError('');
+      setError('');
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setPasswordError('');
+    setError('');
     
     // Validate passwords match
     if (formData.password !== formData.confirmPassword) {
@@ -54,15 +62,28 @@ export default function SignUp() {
 
     setIsLoading(true);
     
-    // Simulating API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    setIsLoading(false);
-    console.log('Sign up attempt:', formData);
+    try {
+      // Sign up with Supabase
+      const { data, error: signUpError } = await signUp(formData.email, formData.password, formData.fullName);
+
+      if (signUpError) {
+        setError(signUpError.message);
+        setIsLoading(false);
+        return;
+      }
+
+      if (data.user) {
+        // Redirect to sign-in or dashboard after successful signup
+        router.push('/sign-in?message=Conta criada com sucesso! Faça login.');
+      }
+    } catch (err) {
+      setError('Erro ao criar conta. Tente novamente.');
+      setIsLoading(false);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center px-4 py-8">
+    <div className="min-h-screen bg-linear-to-br from-slate-50 to-slate-100 flex items-center justify-center px-4 py-8">
       {/* Background decoration */}
       <div className="absolute top-10 left-10 w-40 h-40 bg-rose-200/20 rounded-full blur-3xl"></div>
       <div className="absolute bottom-10 right-10 w-40 h-40 bg-cyan-200/20 rounded-full blur-3xl"></div>
@@ -76,7 +97,7 @@ export default function SignUp() {
           </Link>
           
           <div className="flex items-center justify-center gap-3 mb-6">
-            <img src="/cake-factory-logo.svg" alt="Cake Factory" className="w-12 h-12" />
+            <Image width={12} height={12} src="/cake-factory-logo.svg" alt="Cake Factory" className="w-12 h-12" />
           </div>
           
           <h1 className="text-3xl font-bold text-slate-900 mb-2">Cake Factory</h1>
@@ -198,9 +219,9 @@ export default function SignUp() {
               </div>
 
               {/* Error Message */}
-              {passwordError && (
+              {(passwordError || error) && (
                 <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
-                  <p className="text-sm text-red-700">{passwordError}</p>
+                  <p className="text-sm text-red-700">{passwordError || error}</p>
                 </div>
               )}
 
@@ -243,7 +264,7 @@ export default function SignUp() {
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white border-0 h-11 font-semibold"
+                className="w-full bg-linear-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white border-0 h-11 font-semibold"
               >
                 {isLoading ? (
                   <span className="flex items-center gap-2">
