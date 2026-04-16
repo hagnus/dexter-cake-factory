@@ -1,0 +1,77 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="100" cy="100" r="95" fill="#fff" stroke="url(#gradBorder)" stroke-width="2"/>
+  
+  <defs>
+    <linearGradient id="gradBorder" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ec4899;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#06b6d4;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#facc15;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="gradCake1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#f472b6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ec4899;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="gradCake2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#e0f2fe;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="gradCake3" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#fef3c7;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#facc15;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Left cake layer 1 -->
+  <rect x="35" y="95" width="35" height="50" rx="4" fill="url(#gradCake1)"/>
+  
+  <!-- Left cake frosting -->
+  <path d="M 35 95 Q 35 85 52.5 85 Q 70 85 70 95" fill="#f472b6"/>
+  
+  <!-- Center cake layer 1 -->
+  <rect x="82.5" y="80" width="35" height="65" rx="4" fill="url(#gradCake2)"/>
+  
+  <!-- Center cake frosting (taller) -->
+  <path d="M 82.5 80 Q 82.5 65 100 60 Q 117.5 65 117.5 80" fill="#06b6d4"/>
+  
+  <!-- Right cake layer 1 -->
+  <rect x="130" y="95" width="35" height="50" rx="4" fill="url(#gradCake3)"/>
+  
+  <!-- Right cake frosting -->
+  <path d="M 130 95 Q 130 85 147.5 85 Q 165 85 165 95" fill="#facc15"/>
+  
+  <!-- Factory smokestack - left -->
+  <rect x="45" y="50" width="6" height="30" rx="3" fill="#64748b"/>
+  <circle cx="48" cy="48" r="4" fill="#94a3b8"/>
+  <circle cx="48" cy="45" r="3" fill="#cbd5e1"/>
+  
+  <!-- Factory smokestack - center -->
+  <rect x="97" y="35" width="6" height="45" rx="3" fill="#475569"/>
+  <circle cx="100" cy="33" r="4" fill="#94a3b8"/>
+  <circle cx="100" cy="30" r="3" fill="#cbd5e1"/>
+  
+  <!-- Factory smokestack - right -->
+  <rect x="149" y="50" width="6" height="30" rx="3" fill="#64748b"/>
+  <circle cx="152" cy="48" r="4" fill="#94a3b8"/>
+  <circle cx="152" cy="45" r="3" fill="#cbd5e1"/>
+  
+  <!-- Decorative stars -->
+  <g fill="#facc15">
+    <path d="M 65 55 L 67 61 L 73 61 L 68 65 L 70 71 L 65 67 L 60 71 L 62 65 L 57 61 L 63 61 Z"/>
+  </g>
+  
+  <g fill="#ec4899">
+    <path d="M 135 65 L 137 71 L 143 71 L 138 75 L 140 81 L 135 77 L 130 81 L 132 75 L 127 71 L 133 71 Z"/>
+  </g>
+  
+  <!-- Text -->
+  <text x="100" y="165" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle">
+    <tspan fill="#ec4899">CAKE</tspan>
+  </text>
+  <text x="100" y="182" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle">
+    <tspan fill="#06b6d4">FACTORY</tspan>
+  </text>
+</svg>
