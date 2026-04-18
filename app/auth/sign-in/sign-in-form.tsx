@@ -2,15 +2,14 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Button } from '@/components/ui/button';
-import { Mail } from 'lucide-react';
 import Link from 'next/link';
-import { AuthLayout } from '@/components/auth/auth-layout';
+import { Mail } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { InputField } from '@/components/auth/input-field';
 import { PasswordField } from '@/components/auth/password-field';
-import { signInWithPassword } from '../api/users/auth';
+import { signInWithPassword } from '@/app/api/users/auth';
 
-export default function SignIn() {
+export function SignInForm() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
@@ -41,16 +40,14 @@ export default function SignIn() {
   };
 
   return (
-    <AuthLayout
-      title="Cake Factory"
-      description="Acesse sua conta para gerenciar sua fábrica"
-      backLink="/"
-      backText="Voltar"
-      cardTitle="Entrar"
-      cardDescription="Digite seu email e senha para acessar a plataforma"
-      error={error}
-    >
+    <>
       <form onSubmit={handleSubmit} className="space-y-6">
+        {error && (
+          <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+            <p className="text-sm text-red-700">{error}</p>
+          </div>
+        )}
+
         <InputField
           id="email"
           label="Email"
@@ -70,7 +67,6 @@ export default function SignIn() {
           required
         />
 
-        {/* Remember me & Forgot password */}
         <div className="flex items-center justify-between text-sm">
           <label className="flex items-center gap-2 text-slate-600">
             <input
@@ -84,7 +80,6 @@ export default function SignIn() {
           </a>
         </div>
 
-        {/* Submit Button */}
         <Button
           type="submit"
           disabled={isLoading}
@@ -111,7 +106,6 @@ export default function SignIn() {
         </div>
       </div>
 
-      {/* Alternative login methods */}
       <div className="space-y-3">
         <Button
           type="button"
@@ -129,10 +123,9 @@ export default function SignIn() {
         </Button>
       </div>
 
-      {/* Sign up link */}
       <p className="text-center text-slate-600 text-sm mt-6">
         Não tem uma conta?{' '}
-        <Link href="/sign-up" className="text-rose-600 hover:text-rose-700 font-semibold">
+        <Link href="/auth/sign-up" className="text-rose-600 hover:text-rose-700 font-semibold">
           Criar conta
         </Link>
       </p>
@@ -141,6 +134,7 @@ export default function SignIn() {
       <div className="mt-6 text-center text-xs text-slate-500">
         <p>Ao entrar, você concorda com nossos <a href="#" className="hover:text-slate-700 underline">Termos de Serviço</a> e <a href="#" className="hover:text-slate-700 underline">Política de Privacidade</a>.</p>
       </div>
-    </AuthLayout>
+    </>
   );
 }
+

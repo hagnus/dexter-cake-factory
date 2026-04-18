@@ -20,7 +20,7 @@ export default function Dashboard() {
       
       console.log('Usuário autenticado:', user);
       if (!user) {
-        router.push('/sign-in');
+        router.push('/auth/sign-in');
       } else {
         setUser(user);
       }
@@ -86,17 +86,29 @@ export default function Dashboard() {
           {/* Coming Soon Section */}
           <div className="grid md:grid-cols-4 gap-6">
             {[
-              { title: 'Receitas', icon: '👨‍🍳', description: 'Gerencie suas receitas' },
-              { title: 'Pedidos', icon: '📦', description: 'Acompanhe seus pedidos' },
-              { title: 'Clientes', icon: '👥', description: 'Gerencie seus clientes' },
-              { title: 'Inventário', icon: '📊', description: 'Controle seus ingredientes' },
-            ].map((item, index) => (
-              <div key={index} className="bg-white rounded-xl border border-slate-200 p-6 text-center hover:shadow-lg transition-all">
-                <div className="text-4xl mb-3">{item.icon}</div>
-                <h3 className="font-semibold text-slate-900 mb-1">{item.title}</h3>
-                <p className="text-sm text-slate-600">{item.description}</p>
-              </div>
-            ))}
+              { title: 'Receitas', icon: '👨‍🍳', description: 'Gerencie suas receitas', href: null },
+              { title: 'Pedidos', icon: '📦', description: 'Acompanhe seus pedidos', href: null },
+              { title: 'Clientes', icon: '👥', description: 'Gerencie seus clientes', href: null },
+              { title: 'Inventário', icon: '📊', description: 'Controle seus ingredientes', href: '/dashboard/inventory' },
+            ].map((item, index) => {
+              const content = (
+                <div className="bg-white rounded-xl border border-slate-200 p-6 text-center hover:shadow-lg transition-all h-full flex flex-col items-center justify-center">
+                  <div className="text-4xl mb-3">{item.icon}</div>
+                  <h3 className="font-semibold text-slate-900 mb-1">{item.title}</h3>
+                  <p className="text-sm text-slate-600">{item.description}</p>
+                  {!item.href && <span className="text-xs text-slate-400 mt-2">Em breve</span>}
+                </div>
+              );
+              
+              if (item.href) {
+                return (
+                  <Link key={index} href={item.href}>
+                    {content}
+                  </Link>
+                );
+              }
+              return content;
+            })}
           </div>
 
           {/* Info Box */}

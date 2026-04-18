@@ -2,15 +2,14 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Button } from '@/components/ui/button';
-import { Mail, User, CheckCircle2 } from 'lucide-react';
 import Link from 'next/link';
-import { AuthLayout } from '@/components/auth/auth-layout';
+import { Mail, User, CheckCircle2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { InputField } from '@/components/auth/input-field';
 import { PasswordField } from '@/components/auth/password-field';
-import { signUp } from '../api/users/auth';
+import { signUp } from '@/app/api/users/auth';
 
-export default function SignUp() {
+export function SignUpForm() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -22,6 +21,9 @@ export default function SignUp() {
   });
   const [error, setError] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const [passwordCorrectLength, setPassordCorrectLength] = useState(false);
+  const [passwordCorrectCase, setPasswordCorrectCase] = useState(false);
+  const [passwordWithNumber, setPasswordWithNumber] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -53,6 +55,30 @@ export default function SignUp() {
       setPasswordError('A senha deve ter pelo menos 8 caracteres');
       return;
     }
+    setPassordCorrectLength(true);
+
+    const hasUpper = /[A-Z]/.test(formData.password);
+    if (!hasUpper) {
+      setPasswordError('A senha deve ter letras maiusculas');
+      return;
+    }
+
+    const hasLower = /[a-z]/.test(formData.password);
+    if (!hasLower) {
+      setPasswordError('A senha deve ter letras minusculas');
+      return;
+    }
+
+    setPasswordCorrectCase(true);
+
+    const hasSpecialNoSpace = /[^a-zA-Z0-9\s]/.test(formData.password);
+    const hasNumber = /\d/.test(formData.password);
+    if (!hasNumber || !hasSpecialNoSpace) {
+      setPasswordError('A senha deve ter numeros e caracteres especiais');
+      return;
+    }
+
+    setPasswordWithNumber(true);
 
     if (!formData.acceptTerms) {
       setPasswordError('Você deve aceitar os termos de serviço');
@@ -73,7 +99,7 @@ export default function SignUp() {
 
       if (data.user) {
         // Redirect to sign-in or dashboard after successful signup
-        router.push('/sign-in?message=Conta criada com sucesso! Faça login.');
+        router.push('/auth/sign-in?message=Conta criada com sucesso! Faça login.');
       }
     } catch (err) {
       setError('Erro ao criar conta. Tente novamente.');
@@ -82,16 +108,14 @@ export default function SignUp() {
   };
 
   return (
-    <AuthLayout
-      title="Cake Factory"
-      description="Crie sua conta e comece a gerenciar sua fábrica"
-      backLink="/sign-in"
-      backText="Voltar ao login"
-      cardTitle="Criar Conta"
-      cardDescription="Preencha os dados abaixo para se registrar"
-      error={error || passwordError}
-    >
+    <>
       <form onSubmit={handleSubmit} className="space-y-5">
+        {error && (
+          <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+            <p className="text-sm text-red-700">{error}</p>
+          </div>
+        )}
+
         <InputField
           id="fullName"
           label="Nome Completo"
@@ -160,15 +184,27 @@ export default function SignUp() {
           <p className="text-xs font-semibold text-slate-900 uppercase">Requisitos da senha:</p>
           <ul className="space-y-1 text-xs text-slate-600">
             <li className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+              {
+                passwordCorrectLength 
+                  ? <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                  : <CheckCircle2 className="w-4 h-4 text-slate-300" />
+              }
               Mínimo 8 caracteres
             </li>
             <li className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-slate-300" />
+              {
+                passwordCorrectCase 
+                  ? <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                  : <CheckCircle2 className="w-4 h-4 text-slate-300" />
+              }
               Letras maiúsculas e minúsculas
             </li>
             <li className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-slate-300" />
+              {
+                passwordWithNumber 
+                  ? <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                  : <CheckCircle2 className="w-4 h-4 text-slate-300" />
+              }
               Números e caracteres especiais (recomendado)
             </li>
           </ul>
@@ -194,10 +230,10 @@ export default function SignUp() {
       {/* Sign in link */}
       <p className="text-center text-slate-600 text-sm mt-6">
         Já tem uma conta?{' '}
-        <Link href="/sign-in" className="text-rose-600 hover:text-rose-700 font-semibold">
+        <Link href="/auth/sign-in" className="text-rose-600 hover:text-rose-700 font-semibold">
           Fazer login
         </Link>
       </p>
-    </AuthLayout>
+    </>
   );
 }
